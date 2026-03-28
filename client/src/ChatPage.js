@@ -1,15 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 function ChatPage() {
   const navigate = useNavigate();
 
-  const [config, setConfig] = useState({
-    tone: "Flirty",
-    scenario: "First Date",
-    coachName: "ConfiCoach",
-    userName: "User",
-  });
+const [config, setConfig] = useState({
+  experience: "Romance",
+  tone: "Flirty",
+  scenario: "First Date",
+  coachName: "ConfiCoach",
+  userName: "User",
+});
 
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -17,33 +19,48 @@ function ChatPage() {
 
   const messagesEndRef = useRef(null);
 
-  useEffect(() => {
-    const savedConfig = localStorage.getItem("confiCoachConfig");
-    const savedMessages = localStorage.getItem("confiCoachMessages");
+useEffect(() => {
+  const savedConfig = localStorage.getItem("confiCoachConfig");
+  const savedMessages = localStorage.getItem("confiCoachMessages");
 
-    let parsedConfig = {
-      tone: "Flirty",
-      scenario: "First Date",
-      coachName: "ConfiCoach",
-      userName: "User",
-    };
+  let parsedConfig = {
+    experience: "Romance",
+    tone: "Flirty",
+    scenario: "First Date",
+    coachName: "ConfiCoach",
+    userName: "User",
+  };
 
-    if (savedConfig) {
-      parsedConfig = JSON.parse(savedConfig);
-      setConfig(parsedConfig);
-    }
+  if (savedConfig) {
+    parsedConfig = JSON.parse(savedConfig);
+    setConfig(parsedConfig);
+  }
 
-    if (savedMessages) {
-      setMessages(JSON.parse(savedMessages));
+  if (savedMessages) {
+    setMessages(JSON.parse(savedMessages));
+  } else {
+  let firstMessage = "";
+
+  if (parsedConfig.experience === "Romance") {
+    if (parsedConfig.scenario === "Texting") {
+      firstMessage = `hey ${parsedConfig.userName}… it’s ${parsedConfig.coachName}. what are you opening with?`;
+    } else if (parsedConfig.scenario === "First Approach") {
+      firstMessage = `${parsedConfig.coachName} looks at you* alright ${parsedConfig.userName}… what are you saying to me?`;
     } else {
-      setMessages([
-        {
-          role: "assistant",
-          content: `Hey ${parsedConfig.userName}, I’m ${parsedConfig.coachName}. We’re doing ${parsedConfig.scenario.toLowerCase()} mode with a ${parsedConfig.tone.toLowerCase()} tone. Tell me what you want help with.`,
-        },
-      ]);
+      firstMessage = `${parsedConfig.coachName} smiles* so ${parsedConfig.userName}… you’re on a date with me, what are you saying?`;
     }
-  }, []);
+  } else {
+    firstMessage = `Hey ${parsedConfig.userName}, I’m ${parsedConfig.coachName}. We’re doing ${parsedConfig.scenario.toLowerCase()} mode.`;
+  }
+
+  setMessages([
+    {
+      role: "assistant",
+      content: firstMessage,
+    },
+  ]);
+}
+}, []);
 
   useEffect(() => {
     localStorage.setItem("confiCoachMessages", JSON.stringify(messages));
@@ -124,9 +141,16 @@ function ChatPage() {
       sendMessage();
     }
   };
-
+const themeClass =
+  config.experience === "Romance" ? "theme-flirty" : "theme-serious";
+  
   return (
-    <div className="app">
+<motion.div
+  className={`app ${themeClass}`}
+  initial={{ opacity: 0, y: 16 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.3 }}
+>
       <div className="chat-shell">
         <div className="chat-header">
           <button className="back-button" onClick={handleBack}>
@@ -192,7 +216,7 @@ function ChatPage() {
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
