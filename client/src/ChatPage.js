@@ -49,8 +49,12 @@ useEffect(() => {
     } else {
       firstMessage = `${parsedConfig.coachName} smiles* so ${parsedConfig.userName}… you’re on a date with me, what are you saying?`;
     }
-  } else {
-    firstMessage = `Hey ${parsedConfig.userName}, I’m ${parsedConfig.coachName}. We’re doing ${parsedConfig.scenario.toLowerCase()} mode.`;
+  } else if (parsedConfig.experience === "Interview") {
+    if (parsedConfig.scenario === "Technical Interview") {
+      firstMessage = `Hi ${parsedConfig.userName}, I’m ${parsedConfig.coachName}. Thanks for coming in today. Let’s get started — can you walk me through your background and what you’ve been working on recently?`;
+    } else {
+      firstMessage = `Hi ${parsedConfig.userName}, I’m ${parsedConfig.coachName}. Great to meet you. To kick things off — tell me a little about yourself and why you’re interested in this role.`;
+    }
   }
 
   setMessages([
@@ -71,14 +75,28 @@ useEffect(() => {
   }, [messages, loading]);
 
   const handleBack = () => {
-    navigate("/");
+    if (config.experience === "Interview") {
+      navigate("/interview-setup");
+    } else {
+      navigate("/romance-setup");
+    }
   };
 
   const handleNewChat = () => {
+    let newChatOpener = "";
+    if (config.experience === "Interview") {
+      if (config.scenario === "Technical Interview") {
+        newChatOpener = `Hi ${config.userName}, I’m ${config.coachName}. Thanks for coming in today. Let’s get started — can you walk me through your background and what you’ve been working on recently?`;
+      } else {
+        newChatOpener = `Hi ${config.userName}, I’m ${config.coachName}. Great to meet you. To kick things off — tell me a little about yourself and why you’re interested in this role.`;
+      }
+    } else {
+      newChatOpener = `hey ${config.userName}… it’s ${config.coachName}. ready to go again?`;
+    }
     const freshMessages = [
       {
         role: "assistant",
-        content: `Hey ${config.userName}, I’m ${config.coachName}. We’re doing ${config.scenario.toLowerCase()} mode with a ${config.tone.toLowerCase()} tone. Tell me what you want help with.`,
+        content: newChatOpener,
       },
     ];
 
