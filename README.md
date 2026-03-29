@@ -5,6 +5,15 @@
 
   ---
 
+  ## Preview
+
+  <img width="600" height="979" alt="Screenshot 2026-03-29 at 12 59 21 AM" src="https://github.com/user-attachments/assets/eb9dfd0a-0054-40b9-832d-2d94f2ac8141" />
+  <img width="600 height="979" alt="Screenshot 2026-03-29 at 1 02 09 AM" src="https://github.com/user-attachments/assets/877b6fa2-4883-428b-ace4-b6ef932c9697" />
+  <img width="600" height="981" alt="Screenshot 2026-03-29 at 1 04 40 AM" src="https://github.com/user-attachments/assets/145a9f85-1129-403c-b77c-6fbe542ee4e3" />
+  <img width="600" height="981" alt="Screenshot 2026-03-29 at 1 09 19 AM" src="https://github.com/user-attachments/assets/9e26fb03-a87b-4dbc-973a-1bd3b17c3892" />
+
+  ---
+
   ## Features
 
   ### Romance Mode
