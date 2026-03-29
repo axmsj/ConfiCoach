@@ -19,6 +19,27 @@ const [config, setConfig] = useState({
 
   const messagesEndRef = useRef(null);
 
+const getFirstMessage = (parsedConfig) => {
+  let firstMessage = "";
+
+  if (parsedConfig.experience === "Romance") {
+    if (parsedConfig.scenario === "Texting") {
+      firstMessage = `hey ${parsedConfig.userName}… it’s ${parsedConfig.coachName}. what are you opening with?`;
+    } else if (parsedConfig.scenario === "First Approach") {
+      firstMessage = `*${parsedConfig.coachName} looks at you* alright ${parsedConfig.userName}… what are you saying to me?`;
+    } else {
+      firstMessage = `*${parsedConfig.coachName} smiles* so ${parsedConfig.userName}… you’re on a date with me, what are you saying?`;
+    }
+  } else {
+    firstMessage = `Hey ${parsedConfig.userName}, I’m ${parsedConfig.coachName}. We’re doing ${parsedConfig.scenario.toLowerCase()} mode.`;
+  }
+
+  return {
+    role: "assistant",
+    content: firstMessage,
+  };
+};
+
 useEffect(() => {
   const savedConfig = localStorage.getItem("confiCoachConfig");
   const savedMessages = localStorage.getItem("confiCoachMessages");
@@ -37,33 +58,21 @@ useEffect(() => {
   }
 
   if (savedMessages) {
-    setMessages(JSON.parse(savedMessages));
-  } else {
-  let firstMessage = "";
+    const parsedMessages = JSON.parse(savedMessages);
 
-  if (parsedConfig.experience === "Romance") {
-    if (parsedConfig.scenario === "Texting") {
-      firstMessage = `hey ${parsedConfig.userName}… it’s ${parsedConfig.coachName}. what are you opening with?`;
-    } else if (parsedConfig.scenario === "First Approach") {
-      firstMessage = `${parsedConfig.coachName} looks at you* alright ${parsedConfig.userName}… what are you saying to me?`;
-    } else {
-      firstMessage = `${parsedConfig.coachName} smiles* so ${parsedConfig.userName}… you’re on a date with me, what are you saying?`;
+    if (Array.isArray(parsedMessages) && parsedMessages.length > 0) {
+      setMessages(parsedMessages);
+      return;
     }
-  } else {
-    firstMessage = `Hey ${parsedConfig.userName}, I’m ${parsedConfig.coachName}. We’re doing ${parsedConfig.scenario.toLowerCase()} mode.`;
   }
 
-  setMessages([
-    {
-      role: "assistant",
-      content: firstMessage,
-    },
-  ]);
-}
+  setMessages([getFirstMessage(parsedConfig)]);
 }, []);
 
   useEffect(() => {
-    localStorage.setItem("confiCoachMessages", JSON.stringify(messages));
+    if (messages.length > 0) {
+      localStorage.setItem("confiCoachMessages", JSON.stringify(messages));
+    }
   }, [messages]);
 
   useEffect(() => {
@@ -75,12 +84,7 @@ useEffect(() => {
   };
 
   const handleNewChat = () => {
-    const freshMessages = [
-      {
-        role: "assistant",
-        content: `Hey ${config.userName}, I’m ${config.coachName}. We’re doing ${config.scenario.toLowerCase()} mode with a ${config.tone.toLowerCase()} tone. Tell me what you want help with.`,
-      },
-    ];
+    const freshMessages = [getFirstMessage(config)];
 
     setMessages(freshMessages);
     localStorage.setItem("confiCoachMessages", JSON.stringify(freshMessages));
