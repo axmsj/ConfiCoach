@@ -1,8 +1,7 @@
  # ConfiCoach
 
   ConfiCoach is your personal AI that can help you build **CONFI**dence. Practice real
-  conversations, sharpen your social skills, and show up ready — whether that's a first
-  date or a job interview.
+  conversations, sharpen your social skills, and show up ready.
 
   ---
 
